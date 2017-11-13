@@ -17,3 +17,8 @@ Episodio             json
    tempid            TemporadaId
    viewid            ViewId
    deriving Show
+
+Temporada            json 
+   season_numb       Int
+   seriid            SerieId
+   deriving Show
