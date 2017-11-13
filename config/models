@@ -4,3 +4,9 @@ Usuario              json
    senha             Text
    UniqueEmail       email
    deriving Show
+
+Serie                json
+   nameSerie         Text
+   img               Text
+   generos           [Text]
+   deriving Show
