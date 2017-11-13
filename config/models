@@ -10,3 +10,10 @@ Serie                json
    img               Text
    generos           [Text]
    deriving Show
+   
+Episodio             json
+   season_numbr      Int
+   ep_number         Int
+   tempid            TemporadaId
+   viewid            ViewId
+   deriving Show
