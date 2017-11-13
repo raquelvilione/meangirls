@@ -22,3 +22,8 @@ Temporada            json
    season_numb       Int
    seriid            SerieId
    deriving Show
+   
+View                 json 
+   epid              EpisodioId
+   userid            UsuarioId
+   deriving Show
