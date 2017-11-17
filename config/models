@@ -27,3 +27,8 @@ View                 json
    epid              EpisodioId
    userid            UsuarioId
    deriving Show
+
+Favorito             json
+   userid            UsuarioId
+   seriid            SerieId
+   deriving Show
