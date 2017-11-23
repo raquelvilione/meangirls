@@ -27,6 +27,7 @@ import Network.Wai.Handler.Warp             (Settings, defaultSettings,
                                              defaultShouldDisplayException,
                                              runSettings, setHost,
                                              setOnException, setPort, getPort)
+import Network.Wai.Middleware.Cors
 import Network.Wai.Middleware.RequestLogger (Destination (Logger),
                                              IPAddrSource (..),
                                              OutputFormat (..), destination,
@@ -39,6 +40,7 @@ import System.Log.FastLogger                (defaultBufSize, newStdoutLoggerSet,
 import Handler.Common
 import Handler.Home
 import Handler.Usuario
+import Handler.Serie
 
 -- This line actually creates our YesodDispatch instance. It is the second half
 -- of the call to mkYesodData which occurs in Foundation.hs. Please see the
@@ -89,7 +91,17 @@ makeApplication foundation = do
     logWare <- makeLogWare foundation
     -- Create the WAI application and apply middlewares
     appPlain <- toWaiAppPlain foundation
-    return $ logWare $ defaultMiddlewaresNoLogging appPlain
+    return $ logWare $ defaultMiddlewaresNoLogging $ cors (const (Just $ 
+        CorsResourcePolicy
+            { corsOrigins = Nothing
+            , corsMethods = ["GET", "POST", "PUT", "DELETE", "HEAD", "OPTION", "PATCH"]
+            , corsRequestHeaders = ["Content-Type"]
+            , corsExposedHeaders = Nothing
+            , corsMaxAge = Nothing
+            , corsVaryOrigin = False
+            , corsRequireOrigin = False
+            , corsIgnoreFailures = False
+            })) appPlain
 
 makeLogWare :: App -> IO Middleware
 makeLogWare foundation =

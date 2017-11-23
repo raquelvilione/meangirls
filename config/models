@@ -6,10 +6,15 @@ Usuario              json
    deriving Show
 
 Serie                json
-   nameSerie         Text
-   img               Text
-   generos           [Text]
+   idApi             Int
+   name              Text
+   vote_average      Double
+   poster_path       Text
+   first_air_date    Day
+   popularity        Double
+   -- genre_ids           [Text]
    deriving Show
+   
    
 Episodio             json
    season_numbr      Int
@@ -28,7 +33,7 @@ View                 json
    userid            UsuarioId
    deriving Show
 
-Favorito             json
+UserSerie            json
    userid            UsuarioId
    seriid            SerieId
    deriving Show

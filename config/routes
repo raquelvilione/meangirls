@@ -5,5 +5,10 @@
 
 / HomeR GET 
 
---Usuario
-/usuario/inserir                   UsuarioR         POST
+-- Usuario
+/usuario/inserir                    UsuarioR        POST
+
+-- Serie
+/serie/#UsuarioId/#SerieId          DeleteSerieR    DELETE
+/serie/inserir                      CadSerieR       POST
+-- !/serie/#Text                    ListaSerieR     GET
