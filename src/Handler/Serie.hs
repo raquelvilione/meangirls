@@ -4,34 +4,35 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE TypeFamilies, DeriveGeneric #-}
 module Handler.Serie where
-
+-- ----------------------------------------------------------------------------------------------------------------------
+-- IMPORT
+-- ----------------------------------------------------------------------------------------------------------------------
 import Control.Monad
 import Import 
 import Data.Aeson.Types
 import Network.HTTP.Types.Status
 import Database.Persist.Postgresql 
+import Handler.Temporada
+-- ----------------------------------------------------------------------------------------------------------------------
+-- POST
+-- ----------------------------------------------------------------------------------------------------------------------
+postCadSerieR :: Text -> Handler Value 
+postCadSerieR token = do
+    maybeUser <- runDB $ selectFirst [UsuarioToken ==. token] []
+    case maybeUser of 
+        Just (Entity uid usuario) -> do
+            serie <- requireJsonBody :: Handler Serie
+            serieid <- runDB $ do
+                serieExists <- getBy $ UniqueApi (serieIdApi serie)
+                case serieExists of
+                    Nothing -> insert serie
+                    Just x  -> return $ entityKey x
+            userserie <- runDB . insert $ UserSerie uid serieid
+            sendStatusJSON created201 (object ["resp" .= fromSqlKey userserie])
+        _ -> do
+            sendStatusJSON forbidden403 (object [ "resp" .= ("acao proibida"::Text)])
+-- ----------------------------------------------------------------------------------------------------------------------
+--
+-- ----------------------------------------------------------------------------------------------------------------------
 
-
- -- https://docs.google.com/presentation/d/17GeGwmoYZnm2A86VomchGShw9PIA82Ld5FC-unXiySE/edit?usp=sharing
-
--- apikey 45167e2360d3bc4cac7f0e985b36bae5
-
-postCadSerieR :: Handler Value 
-postCadSerieR = do
-    seri <- requireJsonBody :: Handler Serie
-    seriid <- runDB $ insert seri
-    sendStatusJSON created201 (object ["resp" .= fromSqlKey seriid])
-    
-deleteDeleteSerieR :: UsuarioId -> SerieId -> Handler Value
-deleteDeleteSerieR userid seriid = do 
-    [x] <- runDB $ selectKeysList [UserSerieSeriid ==. seriid, UserSerieUserid ==. userid] []
-    runDB $ delete x
-    sendStatusJSON noContent204 emptyObject
-
-{-getListaSerieR :: Text -> Handler Value
-getListaSerieR x = do
-   --list <- runDB $ selectList [Filter SerieGeneros (Left $ mconcat ["%",x,"%"]) (BackendSpecificFilter "ILIKE")] []
-   list <- runDB $ selectList [SerieGenre_ids ==. [x]] [] -- aqui é uma lista pois no banco é, ele só consegue comparar coisas iguais
-   sendStatusJSON ok200 (object["resp" .= toJSON list])-}
-    
     
