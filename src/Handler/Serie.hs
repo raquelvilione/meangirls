@@ -32,7 +32,18 @@ postCadSerieR token = do
         _ -> do
             sendStatusJSON forbidden403 (object [ "resp" .= ("acao proibida"::Text)])
 -- ----------------------------------------------------------------------------------------------------------------------
+-- GET
+-- ----------------------------------------------------------------------------------------------------------------------
+getListarSeriesR :: Text -> Handler Value 
+getListarSeriesR token = do
+    maybeUser <- runDB $ selectFirst [UsuarioToken ==. token] []
+    case maybeUser of 
+        Just (Entity uid usuario) -> do
+            seriesId <- runDB $ selectList [UserSerieUserid ==. uid] [] 
+            series <- runDB $ mapM (get404 . userSerieSeriid . entityVal) seriesId 
+            sendStatusJSON ok200 (object ["resp" .= (toJSON series) ])
+        _ -> do
+            sendStatusJSON forbidden403 (object [ "resp" .= ("acao proibida"::Text)])
+-- ----------------------------------------------------------------------------------------------------------------------
 --
 -- ----------------------------------------------------------------------------------------------------------------------
-
-    
