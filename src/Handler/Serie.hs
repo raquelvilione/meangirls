@@ -45,5 +45,18 @@ getListarSeriesR token = do
         _ -> do
             sendStatusJSON forbidden403 (object [ "resp" .= ("acao proibida"::Text)])
 -- ----------------------------------------------------------------------------------------------------------------------
+-- DELETE
+-- ----------------------------------------------------------------------------------------------------------------------
+deleteDeleteSerieR :: Text -> UsuarioId -> SerieId -> Handler Value
+deleteDeleteSerieR token userid seriid = do
+    maybeUser <- runDB $ selectFirst [UsuarioToken ==. token] []
+    case maybeUser of 
+        Just (Entity uid usuario) -> do
+            [x] <- runDB $ selectKeysList [UserSerieSeriid ==. seriid, UserSerieUserid ==. userid] []
+            runDB $ delete x
+            sendStatusJSON noContent204 emptyObject
+        _ -> do
+            sendStatusJSON forbidden403 (object [ "resp" .= ("acao proibida"::Text)])
+-- ----------------------------------------------------------------------------------------------------------------------
 --
 -- ----------------------------------------------------------------------------------------------------------------------
