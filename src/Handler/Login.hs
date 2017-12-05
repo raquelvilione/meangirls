@@ -16,10 +16,10 @@ import Database.Persist.Postgresql
 postLoginR :: Handler Value
 postLoginR = do
     (email,senha) <- requireJsonBody :: Handler (Text,Text)
-    maybeUsuario <- runDB $ getBy $ UsuarioLogin email senha -- Foi criada um tipo para âncorar dois valores no banco, possibilitando o uso da função getBy
+    maybeUsuario <- runDB $ getBy $ UsuarioLogin email senha
     case maybeUsuario of
         Just (Entity uid usuario) -> 
-            sendStatusJSON ok200 (object ["resp" .= (usuarioToken usuario) ]) --extraindo o token do usuario
+            sendStatusJSON ok200 (object ["resp" .= (usuarioToken usuario) ])
         _ -> 
             sendStatusJSON status404 (object ["resp" .= ("Usuário não cadastrado"::Text)] )
 -- ----------------------------------------------------------------------------------------------------------------------
