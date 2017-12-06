@@ -6,9 +6,18 @@
 / HomeR GET 
 
 -- Usuario
-/usuario/inserir                    UsuarioR        POST
+/usuario/inserir                                UsuarioR                POST
+        
+-- Login        
+/login                                          LoginR                  POST
 
 -- Serie
-/serie/#UsuarioId/#SerieId          DeleteSerieR    DELETE
-/serie/inserir                      CadSerieR       POST
--- !/serie/#Text                    ListaSerieR     GET
+/serie/inserir/#Text                            CadSerieR               POST
+
+-- UserSerie
+/user-serie/listar-todas/#Text                  ListarSeriesR           GET
+!/user-serie/#Text/#Int                         DeleteSerieR            DELETE
+          
+-- View/EpisodiosAssistidos
+/view/assistidos/#Text/#UsuarioId/#EpisodioId   SelecionadoAssistidoR   GET
+

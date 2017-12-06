@@ -1,8 +1,11 @@
 Usuario              json
    nome              Text
+   sobrenome         Text
    email             Text
    senha             Text
-   UniqueEmail       email
+   token             Text
+   UniqueEmail       email  
+   UsuarioLogin email senha
    deriving Show
 
 Serie                json
@@ -12,22 +15,21 @@ Serie                json
    poster_path       Text
    first_air_date    Day
    popularity        Double
-   -- genre_ids           [Text]
+   overview          Text
+   UniqueApi idApi
    deriving Show
-   
    
 Episodio             json
    season_numbr      Int
    ep_number         Int
    tempid            TemporadaId
-   viewid            ViewId
    deriving Show
 
 Temporada            json 
-   season_numb       Int
+   totalEpi          Int  
    seriid            SerieId
    deriving Show
-   
+
 View                 json 
    epid              EpisodioId
    userid            UsuarioId
@@ -36,4 +38,5 @@ View                 json
 UserSerie            json
    userid            UsuarioId
    seriid            SerieId
+   UniqueUserId userid seriid 
    deriving Show

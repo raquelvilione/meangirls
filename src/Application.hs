@@ -41,6 +41,11 @@ import Handler.Common
 import Handler.Home
 import Handler.Usuario
 import Handler.Serie
+import Handler.Temporada
+import Handler.UserSerie
+import Handler.Login
+import Handler.View
+import Handler.Episodio
 
 -- This line actually creates our YesodDispatch instance. It is the second half
 -- of the call to mkYesodData which occurs in Foundation.hs. Please see the
@@ -115,7 +120,6 @@ makeLogWare foundation =
                             else FromSocket)
         , destination = Logger $ loggerSet $ appLogger foundation
         }
-
 
 -- | Warp settings for the given foundation value.
 warpSettings :: App -> Settings

@@ -11,18 +11,16 @@ import Import
 import Network.HTTP.Types.Status
 import Data.Aeson.Types
 import Database.Persist.Postgresql
+import Yesod.Auth.HashDB (setPassword,userPasswordHash, setPasswordHash)
 -- ----------------------------------------------------------------------------------------------------------------------
 -- POST
 -- ----------------------------------------------------------------------------------------------------------------------
 postUsuarioR :: Handler Value
 postUsuarioR = do
-    usu <- requireJsonBody :: Handler Usuario -- mandar vazio
-    let hash = (usuarioNome usu ++ usuarioSenha usu)
-    let usuario = Usuario (usuarioNome usu) (usuarioSobrenome usu) (usuarioEmail usu) (usuarioSenha usu) (hash)
-    usuarioId <- runDB $ insert usuario
-    sendStatusJSON created201 (object ["resp" .= hash ])
+    usu <- requireJsonBody :: Handler Usuario
+    hashUser <- setPassword (usuarioEmail usu) usu
+    usuarioId <- runDB $ insert hashUser
+    sendStatusJSON created201 (object ["resp" .= (usuarioToken hashUser)])
 -- ----------------------------------------------------------------------------------------------------------------------
 -- 
 -- ----------------------------------------------------------------------------------------------------------------------
-
-    

@@ -4,12 +4,13 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE ViewPatterns #-}
-
 module Foundation where
 
 import Import.NoFoundation
 import Database.Persist.Sql (ConnectionPool, runSqlPool)
 import Yesod.Core.Types     (Logger)
+import Yesod.Auth hiding(LoginR)
+import Yesod.Auth.HashDB (HashDBUser(..))
 
 data App = App
     { appSettings    :: AppSettings
@@ -23,6 +24,7 @@ mkYesodData "App" $(parseRoutesFile "config/routes")
 
 instance Yesod App where
     makeLogger = return . appLogger
+--  type Handler a = HandlerT App IO a
 
 instance YesodPersist App where
     type YesodPersistBackend App = SqlBackend
@@ -35,3 +37,7 @@ instance RenderMessage App FormMessage where
 
 instance HasHttpManager App where
     getHttpManager = appHttpManager
+    
+instance HashDBUser Usuario where
+    userPasswordHash = Just . usuarioToken
+    setPasswordHash h p = p { usuarioToken = h }
